@@ -1,6 +1,6 @@
-# node-js-getting-started
+# water.src
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+An application for reporting clean water, created for CS 2340 Objects and Design at Georgia Tech
 
 This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
 
@@ -9,8 +9,8 @@ This application supports the [Getting Started with Node on Heroku](https://devc
 Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
 
 ```sh
-$ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
+$ git clone git@github.com:vvinutna/watersrc.git # or clone your own fork
+$ cd watersrc
 $ npm install
 $ npm start
 ```
