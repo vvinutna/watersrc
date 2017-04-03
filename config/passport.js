@@ -79,6 +79,9 @@ module.exports = function(passport) {
 
                         user.email    = req.body.email;
                         user.password = req.body.password;
+                        user.first_name = req.body.first_name;
+                        user.last_name = req.body.last_name;
+                        user.privilege = req.body.privilege;
                         //newUser.photo = 'http://www.flippersmack.com/wp-content/uploads/2011/08/Scuba-diving.jpg';
 
                         user.save(function(newUser) {

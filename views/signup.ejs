@@ -32,7 +32,11 @@
     <!-- LOGIN FORM -->
     <form action="/signup" method="post">
         <div class="form-group has-feedback">
-            <input type="text" class="form-control" name="fullName" placeholder="Full Name">
+            <input type="text" class="form-control" name="first_name" placeholder="First Name">
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <input type="text" class="form-control" name="last_name" placeholder="Last Name">
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
@@ -43,6 +47,16 @@
             <input type="password" class="form-control" name="password" placeholder="Password">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
+        <div class="form-group">
+            <label>User Privilege Level</label>
+            <select class="form-control" required="required" name="privilege" id="privilege">
+                <option value="USER">USER</option>
+                <option value="WORKER">WORKER</option>
+                <option value="USER">MANAGER</option>
+                <option value="USER">ADMINISTRATOR</option>
+            </select>
+        </div>
+
 
         <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
     </form>

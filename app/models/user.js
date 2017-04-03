@@ -6,6 +6,9 @@ function User() {
 	this.u_id = 0;
     this.email = "";
     this.password= "";
+    this.first_name= "";
+    this.last_name= "";
+    this.privilege= "";
 
     this.save = function(callback) {
     	var conString = "postgres://zsullibbcjradi:31f72543073d43fb185647654c64ce799395244eb1adc99dec75598472a603a8@ec2-174-129-37-15.compute-1.amazonaws.com:5432/d3thlija746umv?ssl=true";
@@ -15,7 +18,7 @@ function User() {
 
         console.log(this.email +' will be saved');
 
-        var query = client.query('INSERT INTO users(email, password) VALUES($1, $2)', [this.email, this.password], function (err, result) {
+        var query = client.query('INSERT INTO users(email, password, first_name, last_name, privilege) VALUES($1, $2, $3, $4, $5)', [this.email, this.password, this.first_name, this.last_name, this.privilege], function (err, result) {
             if(err){
                 console.log(err);
                 return console.error('error running query', err);
@@ -34,6 +37,9 @@ function User() {
                 user.email= result.rows[0]['email'];
                 user.password = result.rows[0]['password'];
                 user.u_id = result.rows[0]['u_id'];
+                user.first_name = result.rows[0]['first_name'];
+                user.last_name = result.rows[0]['last_name'];
+                user.privilege = result.rows[0]['privilege'];
                 console.log(user.email);
                 client.end();
                 return callback(user);
@@ -101,6 +107,9 @@ User.findById = function(id, callback){
             user.email= result.rows[0]['email'];
             user.password = result.rows[0]['password'];
             user.u_id = result.rows[0]['u_id'];
+            user.first_name = result.rows[0]['first_name'];
+            user.last_name = result.rows[0]['last_name'];
+            user.privilege = result.rows[0]['privilege'];
             return callback(null, user);
         }
     });

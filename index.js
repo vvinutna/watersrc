@@ -46,7 +46,22 @@ function isLoggedIn(req, res, next) {
 }
 
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
-  response.render('pages/dashboard');
+  // Get a Postgres client from the connection pool
+  pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    //return res.json(results);
+    response.render('pages/dashboard', { 
+      email: request.user.email,
+      privilege: request.user.privilege
+    });
+  });
+  // response.render('pages/dashboard');
   // Get a Postgres client from the connection pool
 
 });
