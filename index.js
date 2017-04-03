@@ -93,6 +93,8 @@ app.get('/editProfile', isLoggedIn, function(request, response, next) {
 //for passport
 require('./app/routes.js')(app, passport);
 
+require('./queries.js')(app);
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });

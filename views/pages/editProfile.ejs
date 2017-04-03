@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+
+<% include ../partials/stylesheetLinks %>
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -124,7 +127,7 @@
    	var privilege = form.elements[4].value;
     $.ajax({
       type: 'POST',
-      url: '/api/editprofile',
+      url: '/api/users',
       data: { first_name: first_name, last_name: last_name, email: email, password: password, privilege: privilege}, 
       success: function (response) {
         alert("Your profile has been updated!");
@@ -139,11 +142,10 @@
 
  </script>
 
+ <% include ../partials/scripts %>
+
 <!-- /.center -->
 
-<!-- jQuery 2.2.3 -->
-<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="../../bootstrap/js/bootstrap.min.js"></script>
+
 </body>
 </html>
