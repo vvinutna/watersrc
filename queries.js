@@ -19,21 +19,25 @@ module.exports = function(app) {
         console.log(err);
         return res.status(500).json({success: false, data: err});
       }
-      const query1 = client.query('SELECT * FROM users WHERE email=($1);', [email]);
 
-      // Stream results back one row at a time
-      query1.on('row', (row) => {
-        client.query('INSERT INTO users(first_name, last_name, email, password, privilege) values($1, $2, $3, $4, $5);',
-        [first_name, last_name, email, password, privilege
-        ]);
-      });
 
-      query1.on('error', function(err) {
-        done();
-        return res.status(500).json({success: false, data: err});
-      });
+      const query = client.query('UPDATE users SET first_name=($1), last_name=($2), password=($3), privilege=($4) WHERE email=($5);', [first_name, last_name, password, privilege, email]);
+      console.log(privilege);
+      // const query1 = client.query('SELECT * FROM users WHERE email=($1);', [email]);
 
-      query1.on('end', () => {
+      // // Stream results back one row at a time
+      // query1.on('row', (row) => {
+      //   client.query('INSERT INTO users(first_name, last_name, email, password, privilege) values($1, $2, $3, $4, $5);',
+      //   [first_name, last_name, email, password, privilege
+      //   ]);
+      // });
+
+      // query1.on('error', function(err) {
+      //   done();
+      //   return res.status(500).json({success: false, data: err});
+      // });
+
+      query.on('end', () => {
         done();
         return res.json(results);
       });
