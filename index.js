@@ -66,6 +66,30 @@ app.get('/dashboard', isLoggedIn, function(request, response, next) {
 
 });
 
+app.get('/editProfile', isLoggedIn, function(request, response, next) {
+  // Get a Postgres client from the connection pool
+  pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    //return res.json(results);
+    response.render('pages/editProfile', { 
+      email: request.user.email,
+      privilege: request.user.privilege,
+      last_name: request.user.last_name,
+      first_name: request.user.first_name,
+      password: request.user.password
+    });
+  });
+  // response.render('pages/dashboard');
+  // Get a Postgres client from the connection pool
+
+});
+
 //for passport
 require('./app/routes.js')(app, passport);
 
