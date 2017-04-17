@@ -142,6 +142,7 @@ module.exports = function(app) {
       });
     });
 
+
     // console.log("at api historical graph");
     
     // const results = [];
@@ -187,6 +188,45 @@ module.exports = function(app) {
 
 
 });
+
+  app.post('/viewHistoricalGraph', (req, res, next) => {
+
+    const results = [];
+    const data = {latitude: req.body.latitude, longitude: req.body.longitude, year: req.body.year, ppm_type: req.body.ppm_type};
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    console.log("data latitude: " + data.latitude);
+
+    
+    // SQL Query > Select Data
+    const query = client.query('SELECT * FROM qualityreports');
+    // Stream results back one row at a time
+    query.on('row', (row) => {
+      console.log(row);
+      results.push(row);
+    });
+
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+        done();
+        //return res.json(results);
+        res.render('pages/historicalReportGraph', { 
+          results: results, 
+          email: req.user.email,
+          privilege: req.user.privilege
+        });
+      });
+    });
+
+  });
 
 
 
