@@ -1,95 +1,82 @@
 <!DOCTYPE html>
 <html>
 
-<% include ../partials/stylesheetLinks %>
+<% include ../partials/head %>
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>watersrc</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+<body class="hold-transition skin-blue layout-top-nav">
+<div class="wrapper">
 
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-</head>
-<body class="hold-transition lockscreen">
-<!-- Automatic element centering -->
+  <% include ../partials/header %>
 
-<!-- 	<button type="button" class="btn btn-lg btn-primary btn-block btn-default">LOG OUT</button>
-	<button type="button" class="btn btn-block btn-default">UPDATE PROFILE</button>
-	<button type="button" class="btn btn-block btn-default">VIEW SOURCE REPORTS</button>
-	<button type="button" class="btn btn-block btn-default">VIEW QUALITY REPORTS</button>
-	<button type="button" class="btn btn-block btn-default">VIEW MAP</button>
-	<button type="button" class="btn btn-block btn-default">ADD NEW SOURCE REPORT</button>
-	<button type="button" class="btn btn-block btn-default">ADD NEW QUALITY REPORT</button>
-	<button type="button" class="btn btn-block btn-default">VIEW HISTORICAL REPORT</button> -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Update Profile
+        <small>Update your profile.</small>
+      </h1>
+    </section>
 
-	<div style="padding-left: 40px; padding-top: 40px;">
-		<div>Email: <%=email%> </div>
-		<div>Privilege: <%=privilege%> </div>
-	</div>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
 
-	<form role="form" id="editProfileForm">
-        <div class="form-group has-feedback">
-            <input type="text" class="form-control" name="first_name" placeholder="First Name" value=<%=first_name%>>
-            <span class="glyphicon glyphicon-user form-control-feedback"><%=first_name%></span>
-        </div>
-        <div class="form-group has-feedback">
-            <input type="text" class="form-control" name="last_name" placeholder="Last Name" value=<%=last_name%>>
-            <span class="glyphicon glyphicon-user form-control-feedback"><%=last_name%></span>
-        </div>
-        <div class="form-group has-feedback">
-            <input type="email" class="form-control" name="email" placeholder="Email">
-            <span class="glyphicon glyphicon-envelope form-control-feedback"><%=email%></span>
-        </div>
-        <div class="form-group has-feedback">
-            <input type="password" class="form-control" name="password" placeholder="Password">
-            <span class="glyphicon glyphicon-lock form-control-feedback"><%=password%></span>
-        </div>
-        <div class="form-group">
-            <label>User Privilege Level</label>
-            <select class="form-control" required="required" name="privilege" id="privilege">
-            	<% if(privilege == "USER") { %>
-                	<option value="USER" selected="selected">USER</option>
-                <% } else { %>
-                	<option value="USER">USER</option>
-                <% } %>
+      	<form role="form" id="editProfileForm">
+              <div class="form-group has-feedback">
+                  <input type="text" class="form-control" name="first_name" placeholder="First Name" value=<%=first_name%>>
+                  <span class="glyphicon glyphicon-user form-control-feedback"></span>
+              </div>
+              <div class="form-group has-feedback">
+                  <input type="text" class="form-control" name="last_name" placeholder="Last Name" value=<%=last_name%>>
+                  <span class="glyphicon glyphicon-user form-control-feedback"></span>
+              </div>
+              <div class="form-group has-feedback">
+                  <input type="email" class="form-control" name="email" placeholder="Email">
+                  <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+              </div>
+              <div class="form-group has-feedback">
+                  <input type="password" class="form-control" name="password" placeholder="Password">
+                  <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+              </div>
+              <div class="form-group">
+                  <label>User Privilege Level</label>
+                  <select class="form-control" required="required" name="privilege" id="privilege">
+                  	<% if(privilege == "USER") { %>
+                      	<option value="USER" selected="selected">USER</option>
+                      <% } else { %>
+                      	<option value="USER">USER</option>
+                      <% } %>
 
-                <% if(privilege == "WORKER") { %>
-                	<option value="WORKER" selected="selected">WORKER</option>
-                <% } else { %>
-                	<option value="WORKER">WORKER</option>
-                <% } %>
+                      <% if(privilege == "WORKER") { %>
+                      	<option value="WORKER" selected="selected">WORKER</option>
+                      <% } else { %>
+                      	<option value="WORKER">WORKER</option>
+                      <% } %>
 
-                <% if(privilege == "MANAGER") { %>
-                	<option value="MANAGER" selected="selected">MANAGER</option>
-                <% } else { %>
-                	<option value="MANAGER">MANAGER</option>
-                <% } %>
+                      <% if(privilege == "MANAGER") { %>
+                      	<option value="MANAGER" selected="selected">MANAGER</option>
+                      <% } else { %>
+                      	<option value="MANAGER">MANAGER</option>
+                      <% } %>
 
-                <% if(privilege == "ADMINISTRATOR") { %>
-                	<option value="ADMINISTRATOR" selected="selected">ADMINISTRATOR</option>
-                <% } else { %>
-                	<option value="ADMINISTRATOR">ADMINISTRATOR</option>
-                <% } %>
-            </select>
-        </div>
+                      <% if(privilege == "ADMINISTRATOR") { %>
+                      	<option value="ADMINISTRATOR" selected="selected">ADMINISTRATOR</option>
+                      <% } else { %>
+                      	<option value="ADMINISTRATOR">ADMINISTRATOR</option>
+                      <% } %>
+                  </select>
+              </div>
 
-        <button type="submit" class="btn btn-primary btn-block btn-flat">Edit</button>
-    </form>
+              <button type="submit" class="btn btn-primary btn-block btn-flat">Submit</button>
+          </form>
+      </div>
+    </section>
+</div>
+</div>
+
+</div>
 
 <% include ../partials/scripts %>
 
@@ -146,6 +133,18 @@
 
 <!-- /.center -->
 
+<!-- jQuery 2.2.3 -->
+<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
 
 </body>
 </html>

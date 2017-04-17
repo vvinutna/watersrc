@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<% include ../partials/head %>
+
+<body class="hold-transition skin-blue layout-top-nav">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        New Source Report
+        <small>Add a new source report.</small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+
+      	<form role="form" id="newSourceReportForm">
+              <div class="form-group has-feedback">
+                  <input type="number" step="any" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
+              </div>
+
+              <div class="form-group has-feedback">
+                  <input type="number" step="any" class="form-control" id="longitude" name="longitude" placeholder="Longitude">
+              </div>
+
+              <div class="form-group">
+                <label>Water Source Type</label>
+                <select class="form-control" required="required" name="water_source_type" id="water_source_type">
+                    <option value="Bottled">Bottled</option>
+                    <option value="Well">Well</option>
+                    <option value="Stream">Stream</option>
+                    <option value="Lake">Lake</option>
+                    <option value="Spring">Spring</option>
+                    <option value="Other">Other</option>                    
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Water Condition</label>
+                <select class="form-control" required="required" name="water_condition" id="water_condition">
+                    <option value="Waste">Waste</option>
+                    <option value="Treatable-Muddy">Treatable-Muddy</option>
+                    <option value="Treatable-Clear">Treatable-Clear</option>
+                    <option value="Potable">Potable</option>                   
+                </select>
+              </div>
+
+              <div class="pull-left">
+                <a href="/dashboard" class="btn btn-primary btn-lg">Cancel</a>
+              </div>
+              <div class="pull-right">
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+              </div>
+          </form>
+      </div>
+    </section>
+</div>
+</div>
+
+</div>
+
+<% include ../partials/scripts %>
+
+ <script>
+
+  var emailUser = "<%= email %>";
+  console.log("1: here");
+
+	$("#newSourceReportForm").validate({
+	    rules: {
+	      latitude: {
+	        required: true
+	      }, 
+	      longitude: {
+	      	required: true
+	      }, 
+	      water_source_type: {
+	      	required: true
+	      },
+	      water_condition: {
+	      	required: true
+	      }
+	    },
+	    submitHandler: function(form) {
+        console.log("5: here");
+	      submitNewSourceReportForm();
+        console.log("6: here");
+	    }
+	  });
+	  
+  console.log("2: here");
+  function submitNewSourceReportForm() {
+    console.log("3: here");
+    var form = document.getElementById("newSourceReportForm");
+    var latitude = form.elements[0].value;
+   	var longitude = form.elements[1].value;
+   	var water_source_type = form.elements[2].value;
+   	var water_condition = form.elements[3].value;
+    var email = emailUser;
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'html',
+      url: '/api/sourcereports',
+      data: { latitude: latitude, longitude: longitude, water_source_type: water_source_type, water_condition: water_condition, email: email}, 
+      success: function (data) {
+        alert("The source report has been added!");
+        window.location.reload();
+      },
+      error: function (data) {
+        console.log(error);
+        alert("Something went wrong, please try again later!");
+      }
+    });
+  }
+
+ </script>
+
+ <% include ../partials/scripts %>
+
+<!-- /.center -->
+
+<!-- jQuery 2.2.3 -->
+<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+
+</body>
+</html>

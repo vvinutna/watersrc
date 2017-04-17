@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<% include ../partials/head %>
+
+<body class="hold-transition skin-blue layout-top-nav">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        New Quality Report
+        <small>Add a new quality report.</small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+
+      	<form role="form" id="newQualityReportForm">
+              <div class="form-group has-feedback">
+                  <input type="number" step="any" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
+              </div>
+
+              <div class="form-group has-feedback">
+                  <input type="number" step="any" class="form-control" id="longitude" name="longitude" placeholder="Longitude">
+              </div>
+
+              <div class="form-group">
+                <label>Water Source Type</label>
+                <select class="form-control" required="required" name="water_source_type" id="water_source_type">
+                    <option value="Safe">Safe</option>
+                    <option value="Treatable">Treatable</option>
+                    <option value="Unsafe">Unsafe</option>                  
+                </select>
+              </div>
+
+              <div class="form-group has-feedback">
+                  <input type="number" step="any" class="form-control" id="virus_ppm" name="virus_ppm" placeholder="Virus PPM">
+              </div>
+
+              <div class="form-group has-feedback">
+                  <input type="number" step="any" class="form-control" id="contaminant_ppm" name="contaminant_ppm" placeholder="Contaminant PPM">
+              </div>
+
+              <div class="pull-left">
+                <a href="/dashboard" class="btn btn-primary btn-lg">Cancel</a>
+              </div>
+              <div class="pull-right">
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+              </div>
+          </form>
+      </div>
+    </section>
+</div>
+</div>
+
+</div>
+
+<% include ../partials/scripts %>
+
+ <script>
+
+  var emailUser = "<%= email %>";
+  console.log("1: here");
+
+	$("#newQualityReportForm").validate({
+	    rules: {
+	      latitude: {
+	        required: true
+	      }, 
+	      longitude: {
+	      	required: true
+	      }, 
+	      virus_ppm: {
+	      	required: true
+	      },
+	      contaminant_ppm: {
+	      	required: true
+	      }
+	    },
+	    submitHandler: function(form) {
+        console.log("5: here");
+	      submitNewQualityReportForm();
+        console.log("6: here");
+	    }
+	  });
+	  
+  console.log("2: here");
+  function submitNewQualityReportForm() {
+    console.log("3: here");
+    var form = document.getElementById("newQualityReportForm");
+    var latitude = form.elements[0].value;
+   	var longitude = form.elements[1].value;
+   	var water_source_type = form.elements[2].value;
+   	var virus_ppm = form.elements[3].value;
+    var contaminant_ppm = form.elements[4].value;
+    var email = emailUser;
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'html',
+      url: '/api/qualityreports',
+      data: { latitude: latitude, longitude: longitude, water_source_type: water_source_type, virus_ppm: virus_ppm, contaminant_ppm: contaminant_ppm, email: email}, 
+      success: function (data) {
+        alert("The quality report has been added!");
+        window.location.reload();
+      },
+      error: function (data) {
+        console.log(error);
+        alert("Something went wrong, please try again later!");
+      }
+    });
+  }
+
+ </script>
+
+ <% include ../partials/scripts %>
+
+<!-- /.center -->
+
+<!-- jQuery 2.2.3 -->
+<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <% include ../partials/head %>
+
+    <style>
+       #map {
+        height: 600px;
+        width: 100%;
+       }
+    </style>
+
+  </head>
+  <body class="hold-transition skin-blue layout-top-nav">
+    <div class="wrapper">
+
+      <% include ../partials/header %>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <div class="container" style="height: 690px">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Map
+            <small>View map of all reports.</small>
+          </h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+                <div id="map"></div>
+                <script>
+
+                  // This example displays a marker at the center of Australia.
+                  // When the user clicks the marker, an info window opens.
+
+                  function initMap() {
+
+                    var locations = [];
+                    var contentStrings = [];
+
+                    <% resultsSource.forEach(function(resultSource) { %>
+
+                        var latitude = <%=resultSource.latitude%>;
+                        var longitude = <%=resultSource.longitude%>;
+                        var water_source_type = "<%=resultSource.water_source_type%>";
+                        var water_condition = "<%=resultSource.water_condition%>";
+
+                        locations.push([latitude, longitude]);
+
+                        var contentString = '<div id="content">'+
+                            '<div id="siteNotice">'+
+                            '</div>'+
+                            '<h1 id="firstHeading" class="firstHeading">' + latitude + ' ,' + longitude +'</h1><div id="bodyContent">'+
+                            '<p>'+ water_source_type + " / " + water_condition + "</p>" +
+                            '</div>'+
+                            '</div>';
+
+                        contentStrings.push(contentString);
+
+                    <% }); %>
+
+                    <% resultsQuality.forEach(function(resultQuality) { %>
+
+                        var latitude = <%=resultQuality.latitude%>;
+                        var longitude = <%=resultQuality.longitude%>;
+                        var water_source_type = "<%=resultQuality.water_source_type%>";
+                        var virus_ppm = <%=resultQuality.virus_ppm%>;
+                        var contaminant_ppm = <%=resultQuality.contaminant_ppm%>;
+
+                        locations.push([latitude, longitude]);
+
+                        var contentString = '<div id="content">'+
+                            '<div id="siteNotice">'+
+                            '</div>'+
+                            '<h1 id="firstHeading" class="firstHeading">' + latitude + ' ,' + longitude +'</h1><div id="bodyContent">'+
+                            '<p>'+ water_source_type + ' / Virus: ' + virus_ppm + 
+                            ' / Contaminant: ' + contaminant_ppm + '</p>' +
+                            '</div>'+
+                            '</div>';
+
+                        contentStrings.push(contentString);
+
+                    <% }); %>
+
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                          zoom: 4,
+                          center: new google.maps.LatLng(33.774668, -84.397299)
+                        });
+
+                        var infowindow = new google.maps.InfoWindow();
+                        var marker;
+
+                        for( var i = 0; i < locations.length; i++) {
+
+                          marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(locations[i][0], locations[i][1]),
+                            map: map
+                          });
+                          google.maps.event.addListener(marker, 'click', function(marker, i) {
+                            return function() {
+                              infowindow.open(map, marker);
+                              infowindow.setContent(contentStrings[i]);
+                            }
+                          }(marker,i));
+                        }
+
+
+                  }
+                </script>
+                <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWfiOkBdXDGqfZ7TobOvzNNcrm7fRDHqk&callback=initMap">
+                </script>
+
+
+        </section>
+
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

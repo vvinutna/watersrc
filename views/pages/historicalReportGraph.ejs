@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<% include ../partials/head %>
+
+<!-- Morris charts -->
+<link rel="stylesheet" href="../../plugins/morris/morris.css">
+
+<!-- jQuery 2.2.3 -->
+<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+
+<!-- Morris.js charts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="../../plugins/morris/morris.min.js"></script>
+
+<script>
+
+  // var pg = require('pg');
+  // const connectionString = 'postgres://zsullibbcjradi:31f72543073d43fb185647654c64ce799395244eb1adc99dec75598472a603a8@ec2-174-129-37-15.compute-1.amazonaws.com:5432/d3thlija746umv?ssl=true';
+
+  function getQueryVariable(variable)
+  {
+         var query = window.location.search.substring(1);
+         var vars = query.split("&");
+         for (var i=0;i<vars.length;i++) {
+                 var pair = vars[i].split("=");
+                 if(pair[0] == variable){return pair[1];}
+         }
+         return(false);
+  }
+
+  // var year = getQueryVariable("year");
+  // document.getElementById("year").innerHTML = year;
+
+  // var latitude = getQueryVariable("latitude");
+
+  // var longitude = getQueryVariable("longitude");
+
+  // var ppm_type = getQueryVariable("ppm_type");
+
+  // const results = [];
+  // // Get a Postgres client from the connection pool
+  // pg.connect(connectionString, (err, client, done) => {
+  //   // Handle connection errors
+  //   if(err) {
+  //     done();
+  //     console.log(err);
+  //     return res.status(500).json({success: false, data: err});
+  //   }
+
+    
+  //   // SQL Query > Select Data
+  //   const query = client.query('SELECT * FROM qualityreports WHERE latitude=($1) and longitude=($2) and year(timestamp)=($3);', [latitude, longitude, year]);
+  //   // Stream results back one row at a time
+  //   query.on('row', (row) => {
+  //     console.log(row);
+  //     results.push(row);
+  //   });
+
+  //   query.on('end', () => {
+  //     done();
+  //   });
+
+  // });
+
+    var latitude = getQueryVariable("latitude");
+    
+    var year = getQueryVariable("year");
+
+    var longitude = getQueryVariable("longitude");
+
+    var ppm_type = getQueryVariable("ppm_type");
+
+    var results;
+
+    console.log("latitude:" +latitude);
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'html',
+      url: '/api/historicalGraph',
+      data: { latitude: latitude, longitude: longitude, year: year, ppm_type: ppm_type}, 
+      success: function (response) {
+          results = response;
+              if(results != null) {
+                console.log("its not null");
+                  var graphValues = [];
+                  var label;
+
+                  if(ppm_type == "virus") {
+                    label = 'Virus PPM';
+                  } else {
+                    label = 'Contaminant PPM';
+                  }
+
+                  results.forEach(function(result) {
+                    console.log("something");
+                    if(ppm_type == "virus") {
+                      graphValues.push({y: month(result.timestamp), item1: result.virus_ppm});
+                    } else {
+                      graphValues.push({y: month(result.timestamp), item1: result.contaminant_ppm});
+                    }
+                  });
+
+                $(function () {
+                    // LINE CHART
+                  var line = new Morris.Line({
+                    element: 'line-chart',
+                    resize: true,
+                    data: [ graphValues ],
+                    xkey: 'y',
+                    ykeys: ['item1'],
+                    labels: [ label ],
+                    lineColors: ['#3c8dbc'],
+                    hideHover: 'auto'
+                  });
+                });
+              }
+
+        console.log("got results");
+
+      },
+      error: function (response) {
+        alert("Something went wrong, please try again later!");
+      }
+    });
+
+    // if(results != null) {
+    //   console.log("its not null");
+    //     var graphValues = [];
+    //     var label;
+
+    //     if(ppm_type == virus) {
+    //       label = 'Virus PPM';
+    //     } else {
+    //       label = 'Contaminant PPM';
+    //     }
+
+    //     results.forEach(function(result) {
+    //       console.log("something");
+    //       if(ppm_type == virus) {
+    //         graphValues.push({y: month(result.timestamp), item1: result.virus_ppm});
+    //       } else {
+    //         graphValues.push({y: month(result.timestamp), item1: result.contaminant_ppm});
+    //       }
+    //     });
+
+    //   $(function () {
+    //       // LINE CHART
+    //     var line = new Morris.Line({
+    //       element: 'line-chart',
+    //       resize: true,
+    //       data: [ graphValues ],
+    //       xkey: 'y',
+    //       ykeys: ['item1'],
+    //       labels: [ label ],
+    //       lineColors: ['#3c8dbc'],
+    //       hideHover: 'auto'
+    //     });
+    //   });
+    // }
+
+
+</script>
+
+
+<body class="hold-transition skin-blue layout-top-nav">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Source Reports
+        <small>View all source reports.</small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Historical Report</h3>
+            <div id="year"></div>
+
+          </div>
+          <div class="box-body">
+              <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Line Chart</h3>
+
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div>
+                <div class="box-body chart-responsive">
+                  <div class="chart" id="line-chart" style="height: 300px;"></div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+            </div>
+          </div>
+    </section>
+</div>
+</div>
+
+</div>
+
+
+<% include ../partials/scripts %>
+
+
+
+ <% include ../partials/scripts %>
+
+<!-- /.center -->
+
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<% include ../partials/head %>
+
+<body class="hold-transition skin-blue layout-top-nav">
+<div class="wrapper">
+
+  <% include ../partials/header %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        New Source Report
+        <small>Add a new source report.</small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+
+        <form method="post" role="form" id="newHistoricalReportForm">
+              <div class="form-group has-feedback">
+                  <input type="number" class="form-control" id="year" name="year" placeholder="Year">
+              </div>
+
+              <div class="form-group has-feedback">
+                  <input type="number" step="any" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
+              </div>
+
+              <div class="form-group has-feedback">
+                  <input type="number" step="any" class="form-control" id="longitude" name="longitude" placeholder="Longitude">
+              </div>
+
+              <div class="form-group">
+                  <input type="radio" name="ppm_type" value="virus"> Virus<br>
+                  <input type="radio" name="ppm_type" value="contaminant"> Contaminant
+              </div>
+
+              <div class="pull-left">
+                <a href="/dashboard" class="btn btn-primary btn-lg">Cancel</a>
+              </div>
+              <div class="pull-right">
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+<!--                 <a href="/viewHistoricalReportGraph" class="btn btn-primary btn-lg">Submit</a> -->
+              </div>
+          </form>
+      </div>
+    </section>
+</div>
+</div>
+
+</div>
+
+<% include ../partials/scripts %>
+
+ <script>
+
+  $("#newHistoricalReportForm").validate({
+      rules: {
+        latitude: {
+          required: true
+        }, 
+        longitude: {
+          required: true
+        }, 
+        year: {
+          required: true
+        },
+        ppm_type: {
+          required: true
+        }
+      },
+      submitHandler: function(form) {
+        submitNewHistoricalReportForm();
+      }
+    });
+    
+  function submitNewHistoricalReportForm() {
+    var form = document.getElementById("newHistoricalReportForm");
+    var year = form.elements[0].value;
+    var latitude = form.elements[1].value;
+    var longitude = form.elements[2].value;
+    var ppm_type = form.elements[3].value;
+    
+    window.location.replace('/viewHistoricalReportGraph?latitude='+latitude+"&longitude="+longitude+"&year="+year+"&ppm_type="+ppm_type);
+
+  }
+
+ </script>
+
+ <% include ../partials/scripts %>
+
+<!-- /.center -->
+
+<!-- jQuery 2.2.3 -->
+<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+
+</body>
+</html>

@@ -45,6 +45,17 @@ function isLoggedIn(req, res, next) {
     res.redirect('/');
 }
 
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
+
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
@@ -66,6 +77,7 @@ app.get('/dashboard', isLoggedIn, function(request, response, next) {
 
 });
 
+
 app.get('/editProfile', isLoggedIn, function(request, response, next) {
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
@@ -85,10 +97,177 @@ app.get('/editProfile', isLoggedIn, function(request, response, next) {
       password: request.user.password
     });
   });
-  // response.render('pages/dashboard');
-  // Get a Postgres client from the connection pool
 
 });
+
+app.get('/newSourceReport', isLoggedIn, function(request, response, next) {
+  // Get a Postgres client from the connection pool
+  pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    //return res.json(results);
+    response.render('pages/newSourceReport', { 
+      email: request.user.email,
+      privilege: request.user.privilege,
+    });
+  });
+
+});
+
+app.get('/viewSourceReports', isLoggedIn, function(request, response, next) {
+  const results = [];
+  // Get a Postgres client from the connection pool
+  pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    
+    // SQL Query > Select Data
+    const query = client.query('SELECT * FROM sourcereports');
+    // Stream results back one row at a time
+    query.on('row', (row) => {
+      console.log(row);
+      results.push(row);
+    });
+
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      //return res.json(results);
+      response.render('pages/viewSourceReports', { 
+        results: results, 
+        email: request.user.email,
+        privilege: request.user.privilege
+      });
+    });
+  });
+});
+
+app.get('/newQualityReport', isLoggedIn, function(request, response, next) {
+  // Get a Postgres client from the connection pool
+  pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    //return res.json(results);
+    response.render('pages/newQualityReport', { 
+      email: request.user.email,
+      privilege: request.user.privilege,
+    });
+  });
+
+});
+
+
+app.get('/viewQualityReports', isLoggedIn, function(request, response, next) {
+  const results = [];
+  // Get a Postgres client from the connection pool
+  pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    
+    // SQL Query > Select Data
+    const query = client.query('SELECT * FROM qualityreports');
+    // Stream results back one row at a time
+    query.on('row', (row) => {
+      console.log(row);
+      results.push(row);
+    });
+
+
+    // After all data is returned, close connection and return results
+    query.on('end', () => {
+      done();
+      //return res.json(results);
+      response.render('pages/viewQualityReports', { 
+        results: results, 
+        email: request.user.email,
+        privilege: request.user.privilege
+      });
+    });
+  });
+});
+
+app.get('/viewMap', isLoggedIn, function(request, response, next) {
+  const resultsQuality = [];
+  const resultsSource = [];
+  // Get a Postgres client from the connection pool
+  pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    
+    // SQL Query > Select Data
+    const query = client.query('SELECT * FROM qualityreports');
+    // Stream results back one row at a time
+    query.on('row', (row) => {
+      console.log(row);
+      resultsQuality.push(row);
+    });
+
+    query.on('end', () => {
+      done();
+    });
+
+    const query1 = client.query('SELECT * FROM sourcereports');
+
+    query1.on('row', (row) => {
+      console.log(row);
+      resultsSource.push(row);
+    });
+
+    // After all data is returned, close connection and return results
+    query1.on('end', () => {
+      done();
+      //return res.json(results);
+      response.render('pages/map', { 
+        resultsQuality: resultsQuality,
+        resultsSource: resultsSource, 
+        email: request.user.email,
+        privilege: request.user.privilege
+      });
+    });
+  });
+});
+
+app.get('/viewHistoricalReport', isLoggedIn, function(request, response, next) {
+    response.render('pages/historicalReport', {
+      email: request.user.email,
+      privilege: request.user.privilege
+    });
+});
+
+app.get('/viewHistoricalReportGraph', (req, res, next) => {
+    res.render('pages/historicalReportGraph', {
+      results: "null",
+      email: req.user.email,
+      privilege: req.user.privilege
+    })
+});
+
 
 //for passport
 require('./app/routes.js')(app, passport);
