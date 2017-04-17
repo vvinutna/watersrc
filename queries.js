@@ -189,7 +189,7 @@ module.exports = function(app) {
 
 });
 
-  app.post('/viewHistoricalGraph', (req, res, next) => {
+  app.post('/viewHistoricalReport', (req, res, next) => {
 
     const results = [];
     const data = {latitude: req.body.latitude, longitude: req.body.longitude, year: req.body.year, ppm_type: req.body.ppm_type};
